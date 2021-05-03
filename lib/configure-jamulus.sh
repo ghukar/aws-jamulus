@@ -3,9 +3,6 @@
 # It follow the instructions from this how to guide:
 #   http://orangeblossomchorus.com/index.php/howto-idiots-guide-to-installing-jamulus-server-on-amazon-aws-lightsail-ubuntu-instance
 
-# I set up the Lightsail server with Ubuntu 18.0.4 and with the name:
-#   JamulusTestServer
-
 echo [USER DATA] clone the jamulus.git repo
 git clone https://github.com/corrados/jamulus.git llcon-jamulus
 
@@ -21,10 +18,20 @@ qmake "CONFIG+=nosound" Jamulus.pro
 echo [USER DATA] make the jamulus server
 make clean
 make
-cd
+
+echo [USER DATA] show current folder
+pwd
+ls
+cd ..
+echo [USER DATA] should be user folder now and it should be empty
+pwd
+ls
 
 echo [USER DATA] move the jamulus directory into the ‘/usr/local/bin’ directory
 sudo mv llcon-jamulus/ /usr/local/bin
+
+echo [USER DATA] show if Jamulus exists in the correct folder
+ls /usr/local/bin/llcon-jamulus/Jamulus
 
 echo [USER DATA] create a non-privileged user to run the server; user: jamulus
 sudo adduser --system --no-create-home jamulus
@@ -38,12 +45,6 @@ aws s3 cp s3://jamulus-config-bucket/server-settings.sh jamulus.service
 
 echo [USER DATA] move the script to the systems folder
 sudo mv jamulus.service /etc/systemd/system/
-
-# need to figure out how to transfer a file to the EC2 machine and moves this into the appropriate folder
-# sudo vi /etc/systemd/system/jamulus.service
-
-# Press 'i' and then copy 'server-settings.sh' into the console
-# then press '[ESC]' then ':' then 'wq' then press 'enter'. This will take you back to the terminal prompt and your script has been saved.
 
 echo [USER DATA] let’s double check the script is correct
 cat /etc/systemd/system/jamulus.service

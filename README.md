@@ -2,6 +2,21 @@
 
 Automatically sets up a Jamulus server for on AWS using CDK. Jamulus allows bands to do jam sessions in a remote environment.
 
+## Getting Started (rough list of commands)
+
+```bash
+git clone https://github.com/cabcookie/aws-jamulus.git
+cd aws-jamulus
+# npm install global cdk
+# npm install global awscli
+npm install
+# create PEM file with name JamulusKey in EC2 and download it
+# aws configure
+cdk bootstrap
+cdk deploy
+```
+
+
 ## TODOS
 
 - describe how to establish a Jamulus server

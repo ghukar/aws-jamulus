@@ -29,6 +29,6 @@ export class JamulusServerStack extends Stack {
       toPort: 22130,
     }));
 
-    new CfnOutput(this, 'BastionPublicIp', { value: host.instancePublicIp });
+    new CfnOutput(this, 'JamulusPublicIp', { value: host.instancePublicIp });
   }
 }
