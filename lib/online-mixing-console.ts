@@ -1,4 +1,4 @@
-import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
+import { BlockDeviceVolume, CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Peer, Port, Protocol, SecurityGroup, Vpc } from "@aws-cdk/aws-ec2";
 import { Effect, Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
 import { CfnOutput, Construct } from "@aws-cdk/core";
 
@@ -43,7 +43,9 @@ export class OnlineMixingConsole extends Construct {
       instanceName: 'OnlineMixingConsole',
       machineImage: new GenericLinuxImage({
         // ubuntu 20.04 for intel/AMD
-        'eu-central-1': 'ami-05f7491af5eef733a',
+        // 'eu-central-1': 'ami-05f7491af5eef733a',
+        // Ubuntu Desktop 20.04 with Jamulus and Ardour installed
+        'eu-central-1': 'ami-0652e964f40833660',
       }),
       vpc,
       securityGroup,
@@ -57,8 +59,15 @@ export class OnlineMixingConsole extends Construct {
       // userDataCausesReplacement: true,
       // userData: UserData.custom(readFileSync('./lib/configure-online-mixer.sh', 'utf8')),
     });
+    // mixer.connections.allowFromAnyIpv4(new Port({
+    //   stringRepresentation: 'VNC Ubuntu Desktop',
+    //   protocol: Protocol.TCP,
+    //   fromPort: 5901,
+    //   toPort: 5901,      
+    // }));
 
     new CfnEIPAssociation(this, 'MixerIp', {
+      // this should be a parameter in cdk.json
       allocationId: 'eipalloc-3baa7e00',
       instanceId: mixer.instanceId,
     });
