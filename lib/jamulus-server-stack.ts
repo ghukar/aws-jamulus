@@ -1,8 +1,8 @@
-import { GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from '@aws-cdk/aws-ec2';
+import { CfnEIPAssociation, GenericLinuxImage, Instance, InstanceClass, InstanceSize, InstanceType, Port, Protocol } from '@aws-cdk/aws-ec2';
 import { Stack, Construct, StackProps, CfnOutput } from '@aws-cdk/core';
-import { readFileSync } from 'fs';
 import { createConfigBucket } from './create-config-bucket';
 import { createVpc } from './create-vpc';
+import { OnlineMixingConsole } from './online-mixing-console';
 
 export class JamulusServerStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -14,21 +14,32 @@ export class JamulusServerStack extends Stack {
     const host = new Instance(this, 'JamulusInstance', {
       instanceName: 'JamulusServer',
       ...vpcParams,
-      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.SMALL),
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
       machineImage: new GenericLinuxImage({
-        'eu-west-1': 'ami-0794bfa4791737d52',
-        'eu-central-1': 'ami-08cd0e75576599f20',
+        // an Ubuntu 18.04 arm64 standard image
+        // 'eu-central-1': 'ami-01bced7e7239dbd82',
+        // Custom image with Ubuntu 18.04 for arm64 with a running Jamulus server
+        'eu-central-1': 'ami-03a6b53e1f4869325',
       }),
       keyName: 'JamulusKey',
+      // user data not needed as we are using a customized image with Jamulus running already
+      // userData: UserData.custom(readFileSync('./lib/configure-jamulus.sh', 'utf8')),
+      // userDataCausesReplacement: true,
     });
-    host.addUserData(readFileSync('./lib/configure-jamulus.sh', 'utf8'));
+    new CfnEIPAssociation(this, 'ElasticIp', {
+      allocationId: 'eipalloc-4d0de976',
+      instanceId: host.instanceId,
+    });
     host.connections.allowFromAnyIpv4(new Port({
       stringRepresentation: 'Jamulus access',
       protocol: Protocol.UDP,
       fromPort: 22120,
       toPort: 22130,
     }));
-
     new CfnOutput(this, 'JamulusPublicIp', { value: host.instancePublicIp });
+
+    const onlineMixer = new OnlineMixingConsole(this, 'OnlineMixer', {
+      jamulusServerIpAddress: host.instancePublicIp,
+    });
   }
 }

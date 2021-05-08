@@ -23,7 +23,7 @@ echo [USER DATA] show current folder
 pwd
 ls
 cd ..
-echo [USER DATA] should be user folder now and it should be empty
+echo [USER DATA] should be user folder now and it should show the llcon-jamulus folder
 pwd
 ls
 
