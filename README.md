@@ -19,10 +19,13 @@ cdk deploy
 
 ## TODOS
 
-- describe how to establish a Jamulus server
+- describe how to establish a Jamulus Server
+- describe how to establish a Mixing Console
+- create .sh files for connecting with the server and the mixing console
 - describe pre-requisites
 1. Create AWS account
 1. Creating a key pair
+1. Create two Elastic IPs so your Jamulus Server and your Mixing Console always have the same IP; copy the allocation ID
 1. Install cdk and aws cli locally
 1. Clone git repo
 1. Configure aws environment

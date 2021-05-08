@@ -27,6 +27,7 @@ export class JamulusServerStack extends Stack {
       // userDataCausesReplacement: true,
     });
     new CfnEIPAssociation(this, 'ElasticIp', {
+      // this must be a parameter in cdk.json
       allocationId: 'eipalloc-4d0de976',
       instanceId: host.instanceId,
     });
