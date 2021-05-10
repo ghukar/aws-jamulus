@@ -1,6 +1,14 @@
 # aws-jamulus
 
-Automatically sets up a Jamulus server for on AWS using CDK. Jamulus allows bands to do jam sessions in a remote environment.
+Automatically sets up a Jamulus server and a Ardour mixing console on AWS using CDK. [Jamulus](https://jamulus.io) allows bands to do jam sessions in a remote environment. [Ardour](http://ardour.org) is a digital audio workstation which supports thousands of plugins to let your mix sound nice.
+
+## Architecture
+
+The basic architecture is shown in the image below. We setup a Jamulus server in the AWS cloud which will be available through a defined DNS entry. In addition, it will set up an EC2 instance prepared for being a mixing console.
+
+Every musician opens one Jamulus instance per instrument or microphone and associates the signal to one instance. The Jamulus instances connect to the Jamulus server. The mixing console opens one Jamulus instance per instrument or microphone and directs the signal to separate input channels on Ardour. 
+
+![architecture](./diagrams/architecture.png)
 
 ## Getting Started (rough list of commands)
 
