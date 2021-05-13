@@ -13,10 +13,9 @@ IOSchedulingPriority=0
 # This line below is what you want to edit according to your preferences
 ExecStart=/usr/local/bin/llcon-jamulus/Jamulus --server --nogui \
 --log /var/log/jamulus/jamulus.log \
---centralserver jamulus.fischvolk.de \
 --serverinfo "JamulusServer;Frankfurt;82" \
 --welcomemessage "<h2>Welcome to Mosaik Berlin's Jamulus server</h2>" \
---numchannels 10
+--numchannels 30
 # end of section you might want to alter
 Restart=on-failure
 RestartSec=30
